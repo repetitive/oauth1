@@ -92,9 +92,6 @@ func (c *Config) RequestToken() (requestToken, requestSecret string, err error) 
 	if requestToken == "" || requestSecret == "" {
 		return "", "", errors.New("oauth1: Response missing oauth_token or oauth_token_secret")
 	}
-	if values.Get(oauthCallbackConfirmedParam) != "true" {
-		return "", "", errors.New("oauth1: oauth_callback_confirmed was not true")
-	}
 	return requestToken, requestSecret, nil
 }
 
@@ -126,8 +123,8 @@ func ParseAuthorizationCallback(req *http.Request) (requestToken, verifier strin
 	}
 	requestToken = req.Form.Get(oauthTokenParam)
 	verifier = req.Form.Get(oauthVerifierParam)
-	if requestToken == "" || verifier == "" {
-		return "", "", errors.New("oauth1: Request missing oauth_token or oauth_verifier")
+	if requestToken == "" {
+		return "", "", errors.New("oauth1: Request missing oauth_token")
 	}
 	return requestToken, verifier, nil
 }
